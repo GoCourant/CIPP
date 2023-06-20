@@ -20,6 +20,11 @@ export const appApi = baseApi.injectEndpoints({
         params: { localversion: localVersion },
       }),
     }),
+    loadDash: builder.query({
+      query: (localVersion) => ({
+        path: '/api/GetDashboard',
+      }),
+    }),
     execPermissionsAccessCheck: builder.query({
       query: () => ({
         path: '/api/ExecAccessChecks',
@@ -39,6 +44,9 @@ export const appApi = baseApi.injectEndpoints({
         addUser,
         addStandardsDeploy,
         addChocoApp,
+        onePerTenant,
+        sendtoIntegration,
+        logsToInclude,
       }) => ({
         path: '/api/ExecNotificationConfig',
         data: {
@@ -51,6 +59,9 @@ export const appApi = baseApi.injectEndpoints({
           addUser: addUser,
           addStandardsDeploy: addStandardsDeploy,
           addChocoApp: addChocoApp,
+          onePerTenant: onePerTenant,
+          logsToInclude: logsToInclude,
+          sendtoIntegration: sendtoIntegration,
         },
         method: 'post',
       }),
@@ -68,10 +79,11 @@ export const appApi = baseApi.injectEndpoints({
       }),
     }),
     execClearCache: builder.query({
-      query: () => ({
+      query: ({ tenantsOnly }) => ({
         path: '/api/ListTenants',
         params: {
           ClearCache: true,
+          TenantsOnly: tenantsOnly,
         },
       }),
     }),
@@ -101,6 +113,7 @@ export const {
   useLoadVersionLocalQuery,
   useLoadVersionRemoteQuery,
   useLoadVersionsQuery,
+  useLoadDashQuery,
   useExecPermissionsAccessCheckQuery,
   useLazyExecPermissionsAccessCheckQuery,
   useExecTenantsAccessCheckQuery,
@@ -111,4 +124,5 @@ export const {
   useLazyListNotificationConfigQuery,
   useLazyGenericPostRequestQuery,
   useLazyGenericGetRequestQuery,
+  useGenericGetRequestQuery,
 } = appApi
